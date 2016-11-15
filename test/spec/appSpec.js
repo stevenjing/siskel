@@ -17,6 +17,7 @@ describe('Siskel', function() {
   beforeEach(function() {
     sinon.spy(Movies.prototype, 'sort');
     collection = new Movies(datum);
+    console.log(collection);
     // instantiating a collection invokes sort; reset state
     Movies.prototype.sort.reset();
     model = collection.first();

@@ -6,6 +6,11 @@ var Movie = Backbone.Model.extend({
 
   toggleLike: function() {
     // your code here
+    if (this.get('like') === true) {
+      this.set('like', false);
+    } else {
+      this.set('like', true);
+    }
   }
 
 });
@@ -16,12 +21,17 @@ var Movies = Backbone.Collection.extend({
 
   initialize: function() {
     // your code here
+    this.on('change:like', function() {
+      this.sort();
+    });
   },
 
   comparator: 'title',
 
   sortByField: function(field) {
     // your code here
+    this.comparator = field;
+    this.sort();
   }
 
 });
@@ -59,14 +69,19 @@ var MovieView = Backbone.View.extend({
 
   initialize: function() {
     // your code here
+    this.model.on('change:like', this.render, this);
   },
 
+  // refer to the doc
+  // 'click button' is the event listener, 'handleClick' is the event handler
   events: {
     'click button': 'handleClick'
   },
 
   handleClick: function() {
     // your code here
+    // view has access to the model, each view can only access one model
+    this.model.toggleLike();
   },
 
   render: function() {
@@ -80,6 +95,8 @@ var MoviesView = Backbone.View.extend({
 
   initialize: function() {
     // your code here
+    console.log(this);
+    this.collection.on('sort', this.render, this);
   },
 
   render: function() {
